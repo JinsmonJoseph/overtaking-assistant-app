@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'models.dart';
+import 'distance.dart';
 
 class BndBox extends StatelessWidget {
   final List<dynamic> results;
@@ -42,6 +43,8 @@ class BndBox extends StatelessWidget {
           h = _h * scaleH;
           if (_y < difH / 2) h -= (difH / 2 - _y) * scaleH;
         }
+        var n= screenH-(y+h);
+        var d=dist(n);
         if (re["detectedClass"] == "#"){
           return Positioned(
             left: math.max(0, x),
@@ -60,15 +63,15 @@ class BndBox extends StatelessWidget {
             padding: EdgeInsets.only(top: 5.0, left: 5.0),
             decoration: BoxDecoration(
               border: Border.all(
-                color: (x>(screenW/2)) ? Colors.red : Colors.green,
+                color: (x>(screenW/2)) && d<100 ? Colors.red : Colors.green,
                 width: 3.0,
               ),
             ),
             child: Text(
-              "${re["detectedClass"]} ${((screenH-(y+h))/2).toStringAsFixed(0)}m",
+              "${re["detectedClass"]} ${(d).toStringAsFixed(0)}m",
               style: TextStyle(
-                color: (x>(screenW/2)) ? Colors.red : Colors.green,
-                fontSize: 14.0,
+                color: (x>(screenW/2)) && d<100 ? Colors.red : Colors.green,
+                fontSize: 16.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
