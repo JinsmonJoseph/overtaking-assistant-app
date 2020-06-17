@@ -80,75 +80,8 @@ class BndBox extends StatelessWidget {
       }).toList();
     }
 
-    List<Widget> _renderStrings() {
-      double offset = -10;
-      return results.map((re) {
-        offset = offset + 14;
-        return Positioned(
-          left: 10,
-          top: offset,
-          width: screenW,
-          height: screenH,
-          child: Text(
-            "${re["label"]} ${(re["confidence"] * 100).toStringAsFixed(0)}%",
-            style: TextStyle(
-              color: Color.fromRGBO(37, 213, 253, 1.0),
-              fontSize: 14.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        );
-      }).toList();
-    }
-
-    List<Widget> _renderKeypoints() {
-      var lists = <Widget>[];
-      results.forEach((re) {
-        var list = re["keypoints"].values.map<Widget>((k) {
-          var _x = k["x"];
-          var _y = k["y"];
-          var scaleW, scaleH, x, y;
-
-          if (screenH / screenW > previewH / previewW) {
-            scaleW = screenH / previewH * previewW;
-            scaleH = screenH;
-            var difW = (scaleW - screenW) / scaleW;
-            x = (_x - difW / 2) * scaleW;
-            y = _y * scaleH;
-          } else {
-            scaleH = screenW / previewW * previewH;
-            scaleW = screenW;
-            var difH = (scaleH - screenH) / scaleH;
-            x = _x * scaleW;
-            y = (_y - difH / 2) * scaleH;
-          }
-          return Positioned(
-            left: x - 6,
-            top: y - 6,
-            width: 100,
-            height: 12,
-            child: Container(
-              child: Text(
-                "● ${k["part"]}",
-                style: TextStyle(
-                  color: Color.fromRGBO(37, 213, 253, 1.0),
-                  fontSize: 12.0,
-                ),
-              ),
-            ),
-          );
-        }).toList();
-
-        lists..addAll(list);
-      });
-
-      return lists;
-    }
-
     return Stack(
-      children: model == mobilenet
-          ? _renderStrings()
-          : model == posenet ? _renderKeypoints() : _renderBoxes(),
+      children:  _renderBoxes(),
     );
   }
 }
